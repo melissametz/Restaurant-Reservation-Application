@@ -21,8 +21,7 @@ async function reservationExists(req, res, next) {
 async function validateTimeFormat(req, res, next) {
   const { data = {} } = req.body;
   const time = data.reservation_time
-
-  if (!time.match(/^\d{1,2}:\d{2}([ap]m)?$/)) {
+  if (!time.match(/^\d{1,2}:\d{2}:\d{2}$/)) {
     next({
       status: 400,
       message: "reservation_time must be a valid time format"

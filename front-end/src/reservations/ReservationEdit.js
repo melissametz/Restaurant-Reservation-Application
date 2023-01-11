@@ -47,7 +47,7 @@ function ReservationEdit() {
     const abortController = new AbortController();
     try {
       await updateReservation(
-        reservation_id,
+        //reservation_id,
         reservation,
         abortController.signal
       );
