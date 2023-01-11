@@ -17,23 +17,45 @@ async function reservationExists(req, res, next) {
   })
 }
 
+//is time available
+function timeAvailable(req, res, next) {
+  const { data = {} } = req.body;
+
+  if (
+    /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(data["reservation_time"]) ||
+    /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(
+      data["reservation_time"]
+    )
+  ) {
+    if (data["reservation_time"] < "10:30") {
+      return next({
+        status: 400,
+        message: "restaurant is not open until 10:30AM",
+      });
+    }
+    if (data["reservation_time"] > "21:30") {
+      return next({
+        status: 400,
+        message: "cannot schedule a reservation after 9:30pm",
+      });
+    }
+    return next();
+  }
+  next({ status: 400, message: `Invalid reservation_time` });
+}
+
 //time format
 async function validateTimeFormat(req, res, next) {
-  const { data = {} } = req.body;
-  const time = data.reservation_time
-  if (!time.match(/^\d{1,2}:\d{2}:\d{2}$/)) {
-    next({
-      status: 400,
-      message: "reservation_time must be a valid time format"
-    })
-  }
-  if (time < "10:30" || time > "21:30") {
-    next({
-      status: 400,
-      message: "reservation_time must be within business hours"
-    })
-  }
-
+    const time = req.body.data.reservation_time;
+    const isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(
+      time
+    );
+    if (!isValid) {
+      return next({
+        status: 400,
+        message: `The time you entered is not valid. Please enter a valid reservation_time`,
+      });
+    }
   next();
 }
 
@@ -209,6 +231,7 @@ module.exports = {
     validateDateFormat,
     validateTimeFormat,
     validatePeople,
+    timeAvailable,
     checkStatus,
     asyncErrorBoundary(create)
   ],
@@ -223,6 +246,7 @@ module.exports = {
     validatePeople,
     validateDateFormat,
     validateTimeFormat,
+    timeAvailable,
     hasValidStatus,
     hasValidFields,
     asyncErrorBoundary(update)
