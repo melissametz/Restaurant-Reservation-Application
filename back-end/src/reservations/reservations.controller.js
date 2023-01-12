@@ -25,7 +25,7 @@ function notPastTime(req, res, next){
   
    console.log("line 29", resDateTime, resDateTime.getTime(), currDate);
 
-   if (resDateTime.getTime() < currDate) {
+   if (resDateTime.getTime() > currDate) {
      return next({
        status: 400,
        message: "Must be future date and time",
