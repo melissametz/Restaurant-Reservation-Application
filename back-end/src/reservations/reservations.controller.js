@@ -22,8 +22,9 @@ function notPastTime(req, res, next){
    const { data: { reservation_date, reservation_time } = {} } = req.body;
    const resDateTime = new Date(`${reservation_date} ${reservation_time}`);
    const currDate = new Date();
-   
-   if (resDateTime < currDate) {
+   console.log("line 25", resDateTime, currDate);
+   console.log("line 26", resDateTime.getTime(), currDate.getTime())
+   if (resDateTime.getTime() < currDate.getTime()) {
      return next({
        status: 400,
        message: "Must be future date and time",
