@@ -79,6 +79,7 @@ export default function SeatTable() {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+            {" "}
             <button
               type="button"
               className="btn btn-danger"

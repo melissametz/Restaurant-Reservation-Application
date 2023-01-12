@@ -31,7 +31,7 @@ export default function Tables({ table, loadDashboard }) {
         {reservation_id ? (
           <button
             data-table-id-finish={table_id}
-            className="delete button btn btn-warning"
+            className="delete button btn btn-primary"
             onClick={handleFinish}
           >
             Finish

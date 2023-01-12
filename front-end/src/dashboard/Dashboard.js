@@ -16,7 +16,6 @@ function Dashboard({ date }) {
   //variables for query/date
   const query = useQuery();
   const dateQuery = query.get("date");
-   console.log("line 19", dateQuery);
   //current date in YYYY-MM-DD format
   const today = new Date().toJSON().slice(0, 10);
 
@@ -48,7 +47,6 @@ function Dashboard({ date }) {
     //stop fetch when window is closed
     return () => abortController.abort();
   }
-console.log("line 51", reservations)
   //change date/query to previous day
   const handlePrevious = (event) => {
     event.preventDefault();
@@ -83,7 +81,6 @@ console.log("line 51", reservations)
       reservation={reservation}
     />
   ));
-console.log("line 86", reservationList)
   //header, buttons, and two tables - reservations and tables
   return (
     <main>
@@ -93,6 +90,25 @@ console.log("line 86", reservationList)
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
+      <div className="row">
+        <div className="btn-group col" role="group" aria-label="Basic example">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handlePrevious}
+          >
+            <span className="oi oi-chevron-left"></span>
+            &nbsp;Previous
+          </button>
+          <button type="button" className="btn btn-dark" onClick={handleToday}>
+            Today
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={handleNext}>
+            Next&nbsp;
+            <span className="oi oi-chevron-right"></span>
+          </button>
+        </div>
+      </div>
       <table className="table">
         <thead>
           <tr>
@@ -121,32 +137,12 @@ console.log("line 86", reservationList)
               <th scope="col">Table Name</th>
               <th scope="col">Capacity</th>
               <th scope="col">Is Occupied?</th>
-              <th scope="col">Meal is Finished</th>
+              <th scope="col">Finished?</th>
             </tr>
           </thead>
           <tbody>{tableList}</tbody>
         </table>
       </main>
-
-      <div className="row">
-        <div className="btn-group col" role="group" aria-label="Basic example">
-          <button
-            type="button"
-            className="btn btn-info"
-            onClick={handlePrevious}
-          >
-            <span className="oi oi-chevron-left"></span>
-            &nbsp;Previous
-          </button>
-          <button type="button" className="btn btn-info" onClick={handleToday}>
-            Today
-          </button>
-          <button type="button" className="btn btn-info" onClick={handleNext}>
-            Next&nbsp;
-            <span className="oi oi-chevron-right"></span>
-          </button>
-        </div>
-      </div>
     </main>
   );
 }

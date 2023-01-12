@@ -3,6 +3,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
 /*---------------- Validation Middleware ----------------*/
+
 //reservation exists
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.params || req.body.data
@@ -17,16 +18,31 @@ async function reservationExists(req, res, next) {
   })
 }
 
+function notPastTime(req, res, next){
+   const { data: { reservation_date, reservation_time } = {} } = req.body;
+   const resDateTime = new Date(`${reservation_date} ${reservation_time}`);
+   const currDate = new Date();
+   
+   if (resDateTime < currDate) {
+     return next({
+       status: 400,
+       message: "Must be future date and time",
+     });
+   }
+   return next();
+}
+
 //is time available
 function timeAvailable(req, res, next) {
-  const { data = {} } = req.body;
-
+  const { data={} } = req.body;
+  
   if (
     /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(data["reservation_time"]) ||
     /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(
       data["reservation_time"]
     )
   ) {
+    
     if (data["reservation_time"] < "10:30") {
       return next({
         status: 400,
@@ -90,7 +106,6 @@ async function validateDateFormat(req, res, next) {
 
   next();
 }
-
 
 //people as integer
 function validatePeople(req, res, next) {
@@ -229,32 +244,31 @@ module.exports = {
   create: [
     hasValidProperties,
     validateDateFormat,
+    notPastTime,
     validateTimeFormat,
     validatePeople,
     timeAvailable,
     checkStatus,
-    asyncErrorBoundary(create)
+    asyncErrorBoundary(create),
   ],
-  read: [
-    asyncErrorBoundary(reservationExists),
-    asyncErrorBoundary(read)
-  ],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   update: [
     asyncErrorBoundary(reservationExists),
     hasValidFields,
     hasValidProperties,
     validatePeople,
+    notPastTime,
     validateDateFormat,
     validateTimeFormat,
     timeAvailable,
     hasValidStatus,
     hasValidFields,
-    asyncErrorBoundary(update)
+    asyncErrorBoundary(update),
   ],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
     hasValidFields,
     hasValidStatus,
-    asyncErrorBoundary(update)
-  ]
+    asyncErrorBoundary(update),
+  ],
 };

@@ -68,7 +68,7 @@ export default function Reservations({ reservation, loadDashboard }) {
               <button
                 data-reservation-id-cancel={reservation.reservation_id}
                 type="button"
-                className="btn btn-warning btn-block"
+                className="btn btn-danger btn-block"
                 onClick={handleCancel}
               >
                 Cancel
