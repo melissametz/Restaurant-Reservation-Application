@@ -25,13 +25,6 @@ function notPastTime(req, res, next){
    const currDate = Date.now();
    const newDate = new Date()
   
-  console.log("line 26", resDateTime, resDateTime.getTime(), offsetResDateTime);
-  console.log(
-    "line 27",
-    newDate,
-    newDate.getTime(),
-    newDate.getTimezoneOffset() * 60000
-  );
    if (resDateTime.getTime() < currDate) {
      return next({
        status: 400,
