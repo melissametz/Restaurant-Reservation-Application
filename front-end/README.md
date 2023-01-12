@@ -1,8 +1,6 @@
 # Capstone: Restaurant Reservation System
 
-## Launched Application on Render.com:
-
-**insert url here**
+Render Site: https://restaurant-reservation-app-bmg9.onrender.com/dashboard
 
 > You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
 > The software is used only by restaurant personnel when a customer calls to request a reservation.
