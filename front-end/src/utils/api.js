@@ -69,10 +69,12 @@ export async function listReservations(params, signal) {
 
 export async function createReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;
+  const { reservation_date, reservation_time } = reservation;
+  const timeStamp = new Date(`${reservation_date} ${reservation_time}`).toUTCString();
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({ data: reservation }),
+    body: JSON.stringify({ data: reservation, timeStamp: {timeStamp}}),
     signal,
   };
   return await fetchJson(url, options, reservation);
@@ -88,9 +90,12 @@ export async function readReservation(reservation_id, signal) {
 export async function updateReservation(reservation, signal) {
   const { reservation_id } = reservation;
   const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const { reservation_date, reservation_time}= reservation;
+  const timeStamp = new Date(`${reservation_date} ${reservation_time}`).toUTCString();
+
   const options = {
     method: "PUT",
-    body: JSON.stringify({ data: { ...reservation } }),
+    body: JSON.stringify({ data: { ...reservation }, timeStamp: {timeStamp}}),
     headers,
     signal,
   };

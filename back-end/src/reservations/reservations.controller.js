@@ -19,12 +19,10 @@ async function reservationExists(req, res, next) {
 }
 
 function notPastTime(req, res, next){
-   const { data: { reservation_date, reservation_time } = {} } = req.body;
-   const resDateTime = new Date(`${reservation_date} ${reservation_time}`);
-   const offsetResDateTime = resDateTime.getTimezoneOffset()*60000;
+   const { data, timeStamp } = req.body;
+   const resDateTime = new Date(timeStamp ? timeStamp.timeStamp : `${data.reservation_date} ${data.reservation_time}`);
    const currDate = Date.now();
-   const newDate = new Date()
-  
+
    if (resDateTime.getTime() < currDate) {
      return next({
        status: 400,

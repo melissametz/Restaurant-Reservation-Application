@@ -1,7 +1,6 @@
 //react hooks
 import React from "react";
 import { useHistory } from "react-router-dom";
-//import { createReservation } from "../utils/api";
 
 //reservation form - submits or cancels reservation
 function ReservationForm({ reservation, setReservation, submitHandler }) {
